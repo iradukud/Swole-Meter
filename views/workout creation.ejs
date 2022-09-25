@@ -1,0 +1,32 @@
+<%- include('partials/header') -%>
+
+<%# Allow individuals to create a workout %>
+<h1> Create Workout plan</h1>
+
+<form action="/workout/create" method='POST'>
+  <div class="fields">
+    <div class="field">
+      <label for="muscles">Muscles targerted</label>
+      <input type="text" placeholder="Enter muscles groups targerted" name='muscles' required />
+    </div>
+    <div class="field">
+      <label for="date">Workout date</label>
+      <input type="date" name='date' required>
+    </div>
+    <div class="field">
+      <label for="exercises">Workout Exercises</label>
+      <textarea name="exercises" placeholder="Enter all workout's exercises, with a comma seperating them" rows="4" required></textarea>
+    </div>
+  </div>
+  <input type="submit">
+</form>
+
+
+
+
+
+<a href="/creation" class="col-3 btn btn-primary"> Create Workout</a>
+<a href="/workout" class="col-3 btn btn-primary"> Workout</a>
+<a href="/logout" class="col-3 btn btn-primary"> Logout</a>
+
+<%- include('partials/footer') -%>
