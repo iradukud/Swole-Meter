@@ -5,7 +5,7 @@ module.exports = {
     createWorkout: async (req, res) => {
         try {
             await Workout.create({
-                muscleTargeted: req.body.muscles,
+                muscleTargeted: req.body.muscles.split(','),
                 date: req.body.date,
                 userId: req.user.id,
                 workouts: req.body.exercises.split(',').map(x => {

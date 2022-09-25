@@ -1,0 +1,35 @@
+<%- include('partials/header') -%>
+
+<%# Present today's workout or another day %>
+<%# Allow individuals to look and potentially modifiy their workout %>
+<h1> Exercising</h1>
+
+<% workout.forEach(el => { %>
+<section>
+  <ul>
+    <%  el.muscleTargeted.forEach(muscle => {%>
+    <li>
+      <h6><%= muscle %> </h6>
+    </li>
+    <% })%>
+  </ul>
+
+  <ul>
+    <%  el.workouts.forEach(muscle => {%>
+    <p><%= muscle.exercise %> </p> 
+    <% })%>
+  </ul>
+
+
+
+
+</section>
+<% })%>
+
+
+
+<a href="/creation" class="col-3 btn btn-primary"> Create Workout</a>
+<a href="/workout" class="col-3 btn btn-primary"> Workout</a>
+<a href="/logout" class="col-3 btn btn-primary"> Logout</a>
+
+<%- include('partials/footer') -%>
