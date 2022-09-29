@@ -18,8 +18,20 @@
     <%  el.workouts.forEach((exercises, index) => { %>
     <h3><%= exercises.exercise %> </h3>
 
+    <%# variable the holds the amount of sets of said exercise %>
+    <% const numOfReps = reps.filter( wholeSet => wholeSet.exercise == exercises.exercise).filter(items=>items.set).length %>
+    <%# If no sets exist show the create set button %>
+    <% if(numOfReps == 0) { %>
+    <%# Add set button trigger modal %>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createSet <%= exercises.exercise %> <%= index %>">
+      Create Set
+    </button>
+    <% }%>
+
+    <%# filtered out exercise that did'nt equal the current exercise %>
     <% reps.filter( wholeSet => wholeSet.exercise == exercises.exercise ) 
     .forEach(items => {%>
+    <%# place each set's data on the html page %>
     <% for(i=0 ; i<items.set.length;i++) {%>
     <div>
       <div>
@@ -30,18 +42,45 @@
       </div>
     </div>
     <% } %>
-    <% }) %>
-    
-    <% if(){ %>
-    <%# Add set button trigger modal %>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createSet'<%= exercises.exercise %>''<%= index %>'">
+
+    <%# If sets already exist show the add set button %>
+    <% if(items.set.length) { %>
+    <%# Add additional set button trigger modal %>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSet <%= exercises.exercise %> <%= index %>">
       Add Set
     </button>
-
-    <%} %>
     
+    <%# Add additional set modal %>
+    <div class="modal fade" id="addSet <%= exercises.exercise %> <%= index %>" tabindex="-1" role="dialog" aria-labelledby="addSetSetLabel" aria-hidden="true">
+      <form class="modal-dialog" role="document" action="/workout/addSet/<%= items._id %>?_method=PUT" method="POST">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addSetLabel">Add Set</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label for="weight" class="form-label">Weight Used</label>
+            <input type="number" class="form-control" placeholder="weight used" name="weight" />
+            <label for="set" class="form-label">Set Number</label>
+            <input type="number" class="form-control" placeholder="set number" name="set" />
+            <label for="reps" class="form-label">Reps Completed</label>
+            <input type="number" class="form-control" placeholder="reps completed" name="rep" />
+            <input type="hidden" name='exercise' value='<%= exercises.exercise %>' />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add set</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <% }%>
+    <% }) %>
+
     <%# Add set modal %>
-    <div class="modal fade" id="createSet'<%= exercises.exercise %>''<%= index %>'" tabindex="-1" role="dialog" aria-labelledby="createSetLabel" aria-hidden="true">
+    <div class="modal fade" id="createSet <%= exercises.exercise %> <%= index %>" tabindex="-1" role="dialog" aria-labelledby="createSetLabel" aria-hidden="true">
       <form class="modal-dialog" role="document" action="/workout/createSet/<%= el._id %>" method="POST">
         <div class="modal-content">
           <div class="modal-header">
@@ -57,7 +96,7 @@
             <input type="number" class="form-control" placeholder="set number" name="set" />
             <label for="reps" class="form-label">Reps Completed</label>
             <input type="number" class="form-control" placeholder="reps completed" name="rep" />
-            <input type="text" name='exercise' value='<%= exercises.exercise %>' />
+            <input type="hidden" name='exercise' value='<%= exercises.exercise %>' />
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

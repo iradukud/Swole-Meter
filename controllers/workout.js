@@ -21,7 +21,7 @@ module.exports = {
     },
     //create a set for the selected exercise
     createSet: async (req, res) => {
-        console.log(req.body.exercise)
+        //console.log(req.body.exercise)
         const exercise = req.params.id
         try {
             await Sets.create({
@@ -33,6 +33,25 @@ module.exports = {
                 repetitions: (req.body.rep).split(),
             })
             console.log('Set has been created!')
+            res.redirect('/workout')
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    //add a set for the selected exercise 
+    addSet: async (req, res) => {
+        console.log(req.body.weight)
+        console.log(req.params.id)
+        const setID = req.params.id
+        try {
+            await Sets.findOneAndUpdate({ _id: req.params.id }, {
+                $push: {
+                    weight: req.body.weight,
+                    set: req.body.set,
+                    repetitions: req.body.rep
+                }
+            })
+            console.log('Set has add created!')
             res.redirect('/workout')
         } catch (err) {
             console.log(err)
