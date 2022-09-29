@@ -1,4 +1,5 @@
 const Workout = require('../models/Workout')
+const Sets = require('../models/Sets')
 
 module.exports = {
   getIndex: (req, res) => {
@@ -13,7 +14,8 @@ module.exports = {
   getPlan: async (req, res) => {
     try {
       const workoutItems = await Workout.find({ userId: req.user.id })
-      res.render('exercising.ejs', { workout: workoutItems, user: req.user })
+      const SetRep = await Sets.find({ userId: req.user.id })
+      res.render('exercising.ejs', { workout: workoutItems, user: req.user, reps: SetRep, })
     } catch (err) {
       console.log(err)
     }
