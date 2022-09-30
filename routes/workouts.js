@@ -9,5 +9,6 @@ router.post("/create", workoutController.createWorkout)
 router.post("/createSet/:id", workoutController.createSet)
 router.put("/addSet/:id", workoutController.addSet)
 router.delete("/deleteSet/:id", workoutController.deleteSet)
+router.put("/editSet/:id", workoutController.editSet)
 
 module.exports = router

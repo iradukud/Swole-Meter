@@ -59,10 +59,9 @@ module.exports = {
     },
     //delete a set for the selected exercise 
     deleteSet: async (req, res) => {
-        console.log(req.body.index)
         const setID = req.params.id
         try {
-            await Sets.findOneAndUpdate({ _id: req.params.id }, {
+            await Sets.findOneAndUpdate({ _id: setID }, {
                 $pull: {
                     weight: req.body.weight,
                     set: req.body.set,
@@ -70,8 +69,23 @@ module.exports = {
                 }
             })
             //delete whole document if set's array is empty (could use repetitions/weight arrays as conditions too)  
-            await Sets.findOneAndDelete({ _id: req.params.id, set: { $exists: true, $size: 0 } })
+            await Sets.findOneAndDelete({ _id: setID, set: { $exists: true, $size: 0 } })
             console.log('Set deleted!')
+            res.redirect('/workout')
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    //edit a set for the selected exercise 
+    editSet: async (req, res) => {
+        const setID = req.params.id
+        try {
+            await Sets.findOneAndUpdate({ _id: setID }, {
+                $set: { 'set.$[i]': req.body.newSet, 'weight.$[j]': req.body.newWeight, 'repetitions.$[k]': req.body.newRep },
+            }, {
+                arrayFilters: [{ 'i': req.body.set }, { 'j': req.body.weight }, { 'k': req.body.rep }]
+            })
+            console.log('Set edited!')
             res.redirect('/workout')
         } catch (err) {
             console.log(err)

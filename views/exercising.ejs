@@ -35,20 +35,52 @@
     <% for(i=0 ; i<items.set.length;i++) {%>
     <div>
       <div>
-        <h5><%=items.weight[i]%> 
-          <form action="/workout/deleteSet/<%=items._id%>?_method=DELETE" method="POST">
-            <input type="hidden" name='weight' value='<%= items.weight[i] %>' />
-            <input type="hidden" name='set' value='<%= items.set[i] %>' />
-            <input type="hidden" name='rep' value='<%= items.repetitions[i]%>' />
-          <button class="fas fa-trash"></button>
-          <i class="fas fa-edit"></i>
-    </form>
-          
-      </div>
-      <div>
-        <span><%=items.set[i]%> X <%=items.repetitions[i]%></span>
+        <h5><%=items.weight[i]%>
+          <div>
+            <span><%=items.set[i]%> X <%=items.repetitions[i]%></span>
+          </div>
+          <div>
+            <form action="/workout/deleteSet/<%=items._id%>?_method=DELETE" method="POST">
+              <input type="hidden" name='weight' value='<%= items.weight[i] %>' />
+              <input type="hidden" name='set' value='<%= items.set[i] %>' />
+              <input type="hidden" name='rep' value='<%= items.repetitions[i]%>' />
+              <button class="fas fa-trash"></button>
+            </form>
+
+            <%# Add edit set button trigger modal %>
+            <button type="button" class="fas fa-edit" data-toggle="modal" data-target="#editSet <%= exercises.exercise %> <%= index %>"> </button>
+          </div>
       </div>
     </div>
+    <%# edit set modal %>
+    <div class="modal fade" id="editSet <%= exercises.exercise %> <%= index %>" tabindex="-1" role="dialog" aria-labelledby="editSetSetLabel" aria-hidden="true">
+      <form class="modal-dialog" role="document" action="/workout/editSet/<%= items._id %>?_method=PUT" method="POST">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editSetLabel">Add Set</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label for="newWeight" class="form-label">Weight Used</label>
+            <input type="number" class="form-control" placeholder="weight used" name="newWeight" />
+            <label for="newSet" class="form-label">Set Number</label>
+            <input type="number" class="form-control" placeholder="set number" name="newSet" />
+            <label for="newReps" class="form-label">Reps Completed</label>
+            <input type="number" class="form-control" placeholder="reps completed" name="newRep" />
+            <input type="hidden" name='weight' value='<%= items.weight[i] %>' />
+            <input type="hidden" name='set' value='<%= items.set[i] %>' />
+            <input type="hidden" name='rep' value='<%= items.repetitions[i] %>' />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add set</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
     <% } %>
 
     <%# If sets already exist show the add set button %>
@@ -57,7 +89,7 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSet <%= exercises.exercise %> <%= index %>">
       Add Set
     </button>
-    
+
     <%# Add additional set modal %>
     <div class="modal fade" id="addSet <%= exercises.exercise %> <%= index %>" tabindex="-1" role="dialog" aria-labelledby="addSetSetLabel" aria-hidden="true">
       <form class="modal-dialog" role="document" action="/workout/addSet/<%= items._id %>?_method=PUT" method="POST">
