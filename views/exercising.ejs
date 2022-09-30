@@ -35,7 +35,15 @@
     <% for(i=0 ; i<items.set.length;i++) {%>
     <div>
       <div>
-        <h5><%=items.weight[i]%></h5>
+        <h5><%=items.weight[i]%> 
+          <form action="/workout/deleteSet/<%=items._id%>?_method=DELETE" method="POST">
+            <input type="hidden" name='weight' value='<%= items.weight[i] %>' />
+            <input type="hidden" name='set' value='<%= items.set[i] %>' />
+            <input type="hidden" name='rep' value='<%= items.repetitions[i]%>' />
+          <button class="fas fa-trash"></button>
+          <i class="fas fa-edit"></i>
+    </form>
+          
       </div>
       <div>
         <span><%=items.set[i]%> X <%=items.repetitions[i]%></span>

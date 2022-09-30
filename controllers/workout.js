@@ -32,7 +32,7 @@ module.exports = {
                 set: (req.body.set).split(),
                 repetitions: (req.body.rep).split(),
             })
-            console.log('Set has been created!')
+            console.log('Set created!')
             res.redirect('/workout')
         } catch (err) {
             console.log(err)
@@ -51,7 +51,27 @@ module.exports = {
                     repetitions: req.body.rep
                 }
             })
-            console.log('Set has add created!')
+            console.log('Set added!')
+            res.redirect('/workout')
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    //delete a set for the selected exercise 
+    deleteSet: async (req, res) => {
+        console.log(req.body.index)
+        const setID = req.params.id
+        try {
+            await Sets.findOneAndUpdate({ _id: req.params.id }, {
+                $pull: {
+                    weight: req.body.weight,
+                    set: req.body.set,
+                    repetitions: req.body.rep
+                }
+            })
+            //delete whole document if set's array is empty (could use repetitions/weight arrays as conditions too)  
+            await Sets.findOneAndDelete({ _id: req.params.id, set: { $exists: true, $size: 0 } })
+            console.log('Set deleted!')
             res.redirect('/workout')
         } catch (err) {
             console.log(err)
